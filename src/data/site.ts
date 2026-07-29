@@ -1,0 +1,106 @@
+import type { EventItem, ResourceItem, TeamMember } from "@/types";
+
+export const navItems = [
+  { label: "Home", href: "/" },
+  { label: "Events", href: "/events" },
+  { label: "Team", href: "/team" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Resources", href: "/resources" },
+];
+
+export const events: EventItem[] = [
+  {
+    id: "evt-01",
+    slug: "inauguration-sesa",
+    title: "Inauguration of SESA",
+    description: "The official launch of the Software Engineering Student Association, marking the beginning of a new chapter for technical collaboration and community building at MITAOE.",
+    date: "16 February 2026",
+    time: "10:00 AM – 1:00 PM",
+    venue: "Auditorium",
+    category: "Showcase",
+    status: "completed",
+    accent: "from-[#163a62] via-[#234f7a] to-[#b18345]",
+  },
+  {
+    id: "evt-02",
+    slug: "framefest26",
+    title: "FRAMEFEST'26",
+    description: "Every frame has a story. Every reel has a voice. ✨\n\nIt's time to turn your creativity into something unforgettable! 📸🎥\n\nJoin FRAMEFEST'26 and showcase your best clicks, edits, memories, and moments.\n\n🌍 Travel • 🎭 Culture • 💻 Innovation • 🌱 Nature • 📚 Campus Life • and more!",
+    date: "17 June 2026 – 02 July 2026",
+    time: "All day",
+    venue: "MITAOE Campus",
+    category: "Contest",
+    status: "completed",
+    accent: "from-[#8a6940] to-[#cab48e]",
+  },
+  {
+    id: "evt-03",
+    slug: "induction-2026",
+    title: "Induction",
+    description: "Orientation programme for second-year students to welcome them into the SESA community and introduce them to the association's activities, teams, and opportunities.",
+    date: "Upcoming",
+    time: "TBA",
+    venue: "TBA",
+    category: "Orientation",
+    status: "upcoming",
+    accent: "from-[#5076a6] to-[#9ab7d8]",
+  },
+  {
+    id: "evt-04",
+    slug: "sports-tournament",
+    title: "Sports Tournament",
+    description: "Department-level sports tournament for students. Compete, collaborate, and represent your department in a wide range of athletic events.",
+    date: "Upcoming",
+    time: "TBA",
+    venue: "TBA",
+    category: "Sports",
+    status: "upcoming",
+    accent: "from-[#66755d] to-[#b8c8a9]",
+  },
+];
+
+export const team: TeamMember[] = [
+  { id: "tm-01", name: "Aarya Balu Malghe", role: "Core Member", group: "Core Members", initials: "AM", year: "B.Tech", email: "202301100061@mitaoe.ac.in" },
+  { id: "tm-02", name: "Ayush Chandekar", role: "Executive Member", group: "Executive Members", initials: "AC", year: "B.Tech", email: "202301100034@mitaoe.ac.in" },
+  { id: "tm-03", name: "Kishor Krishna Mugale", role: "Core Member", group: "Core Members", initials: "KM", year: "B.Tech", email: "202402100008@mitaoe.ac.in" },
+  { id: "tm-04", name: "Mahesh Shamrao Dhote", role: "Core Member", group: "Core Members", initials: "MD", year: "B.Tech", email: "202402100009@mitaoe.ac.in" },
+  { id: "tm-05", name: "Prachi Tukaram Phunde", role: "Core Member", group: "Core Members", initials: "PP", year: "B.Tech", email: "202301100042@mitaoe.ac.in" },
+  { id: "tm-06", name: "Sanket Rath", role: "Executive Member", group: "Executive Members", initials: "SR", year: "B.Tech", email: "202301100006@mitaoe.ac.in" },
+  { id: "tm-07", name: "Shubham Pawade", role: "Core Member", group: "Core Members", initials: "SP", year: "B.Tech", email: "202301100028@mitaoe.ac.in" },
+  { id: "tm-08", name: "Siddhant Kumar Sahu", role: "Core Member", group: "Core Members", initials: "SS", year: "B.Tech", email: "202301070159@mitaoe.ac.in" },
+  { id: "tm-09", name: "Aaditi Mahesh Bhalerao", role: "Executive Member", group: "Executive Members", initials: "AB", year: "TY", email: "202401100057@mitaoe.ac.in" },
+  { id: "tm-10", name: "Aditya Shankar Patil", role: "Core Member", group: "Core Members", initials: "AP", year: "TY", email: "202401100094@mitaoe.ac.in" },
+  { id: "tm-11", name: "Aman Pathan", role: "Executive Member", group: "Executive Members", initials: "AP", year: "TY", email: "202401100060@mitaoe.ac.in" },
+  { id: "tm-12", name: "Anvith Ashok Shetty", role: "Executive Member", group: "Executive Members", initials: "AS", year: "TY", email: "202401100138@mitaoe.ac.in" },
+  { id: "tm-13", name: "Chaitanya Yogesh Umbarkar", role: "Executive Member", group: "Executive Members", initials: "CU", year: "TY", email: "202401100080@mitaoe.ac.in" },
+  { id: "tm-14", name: "GORE YOGESH NAGNATH", role: "Core Member", group: "Core Members", initials: "YN", year: "TY", email: "202502100001@mitaoe.ac.in" },
+  { id: "tm-15", name: "Indrajeet Gire", role: "Core Member", group: "Core Members", initials: "IG", year: "TY", email: "202401100059@mitaoe.ac.in" },
+  { id: "tm-16", name: "Jay Yogesh Nimase", role: "Executive Member", group: "Executive Members", initials: "JN", year: "TY", email: "202401100121@mitaoe.ac.in" },
+  { id: "tm-17", name: "Janhavi Hinganghatkar", role: "Executive Member", group: "Executive Members", initials: "JH", year: "TY", email: "202401100025@mitaoe.ac.in" },
+  { id: "tm-18", name: "Karthik Jayakumar", role: "Executive Member", group: "Executive Members", initials: "KJ", year: "TY", email: "202401100070@mitaoe.ac.in" },
+  { id: "tm-19", name: "Madhav Rungta", role: "Executive Member", group: "Executive Members", initials: "MR", year: "TY", email: "202401100097@mitaoe.ac.in" },
+  { id: "tm-20", name: "Neha Anant Pagar", role: "Core Member", group: "Core Members", initials: "NP", year: "TY", email: "202401100149@mitaoe.ac.in" },
+  { id: "tm-21", name: "Rachmale Shruti Ravindra", role: "Executive Member", group: "Executive Members", initials: "RR", year: "TY", email: "202401100045@mitaoe.ac.in" },
+  { id: "tm-22", name: "Sumit Sanjay Jadhav", role: "Executive Member", group: "Executive Members", initials: "SJ", year: "TY", email: "202401100023@mitaoe.ac.in" },
+  { id: "tm-23", name: "Tanaya Sudhir Mukwane", role: "Core Member", group: "Core Members", initials: "TM", year: "TY", email: "202401100063@mitaoe.ac.in" },
+  { id: "tm-24", name: "Tejas Vinod Yendole", role: "Core Member", group: "Core Members", initials: "TY", year: "TY", email: "202401100054@mitaoe.ac.in" },
+  { id: "tm-25", name: "Aryan Chaudhari", role: "Core Member", group: "Core Members", initials: "AC", year: "SY", email: "202401100142@mitaoe.ac.in" },
+];
+
+export const resources: ResourceItem[] = [
+  { id: "res-01", title: "Frontend Engineering Starter Pack", type: "Guide", description: "A structured path covering HTML, CSS, JavaScript, React and practical project habits.", meta: "12 modules" },
+  { id: "res-02", title: "Git & GitHub Team Workflow", type: "Playbook", description: "Branching, pull requests, reviews, issues and clean handover practices for student teams.", meta: "Updated July 2026" },
+  { id: "res-03", title: "Event Planning Checklist", type: "Template", description: "A reusable checklist for permissions, logistics, registrations, communication and reporting.", meta: "Printable" },
+  { id: "res-04", title: "Project Documentation Standard", type: "Standard", description: "A simple documentation structure so future batches can understand and continue projects.", meta: "Version 1.0" },
+  { id: "res-05", title: "Software Engineering Reading List", type: "Collection", description: "Selected references for design, architecture, testing, databases and product thinking.", meta: "24 resources" },
+  { id: "res-06", title: "Presentation & Demo Guide", type: "Guide", description: "How to explain a technical project clearly without overselling unfinished work.", meta: "8 min read" },
+];
+
+export const galleryItems = [
+  { title: "Project Expo", category: "Showcase", label: "Build in public", gradient: "from-[#163a62] via-[#234f7a] to-[#b18345]" },
+  { title: "Coding Sprint", category: "Hackathon", label: "Solve together", gradient: "from-[#101d36] via-[#4f3a63] to-[#d4a15d]" },
+  { title: "Expert Session", category: "Talk", label: "Learn from practice", gradient: "from-[#24364e] via-[#5d6f65] to-[#d4bd93]" },
+  { title: "Design Workshop", category: "Workshop", label: "Make ideas visible", gradient: "from-[#122f50] via-[#73516d] to-[#c99956]" },
+  { title: "Team Meet", category: "Community", label: "Work with clarity", gradient: "from-[#142746] via-[#385c73] to-[#a27b49]" },
+  { title: "Open Source Day", category: "Community", label: "Contribute beyond campus", gradient: "from-[#1b3551] via-[#3c6b65] to-[#b98c4a]" },
+];
