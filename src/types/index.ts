@@ -1,4 +1,4 @@
-export type EventStatus = "upcoming" | "open" | "completed";
+export type EventStatus = "completed" | "live" | "upcoming" | "planned";
 
 export interface EventItem {
   id: string;
@@ -11,7 +11,11 @@ export interface EventItem {
   category: string;
   status: EventStatus;
   featured?: boolean;
+  published?: boolean;
   seats?: number;
+  posterUrl?: string;
+  registrationUrl?: string;
+  registrationDeadline?: string;
   accent: string;
 }
 
@@ -22,7 +26,12 @@ export interface TeamMember {
   group: string;
   initials: string;
   year: string;
-  email: string;
+  email?: string;
+  isEmailPublic?: boolean;
+  profileImageUrl?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
+  displayOrder?: number;
 }
 
 export interface ResourceItem {
@@ -31,4 +40,15 @@ export interface ResourceItem {
   type: string;
   description: string;
   meta: string;
+}
+
+export type AnnouncementPriority = "normal" | "important" | "urgent";
+
+export interface AnnouncementItem {
+  id: string;
+  title: string;
+  message: string;
+  priority: AnnouncementPriority;
+  linkUrl?: string;
+  isPinned: boolean;
 }

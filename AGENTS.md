@@ -5,7 +5,7 @@ This repository contains the production website for the Software Engineering Stu
 ## Project context
 - Framework: Next.js 15, React 19, TypeScript
 - Styling: Tailwind CSS with a custom theme defined in src/app/globals.css
-- Content: Site data lives in src/data/site.ts and should remain the primary source for events, team members, resources, and gallery content
+- Content: Supabase is the primary source for events, team members, and announcements when configured. The verified arrays in src/data/site.ts remain the public fallback until database setup and seeding have been verified. Resources and gallery placeholders remain local.
 - Shared UI: Reusable sections and components live under src/components and should be preserved unless a targeted improvement is explicitly requested
 
 ## Non-negotiable rules
@@ -28,5 +28,5 @@ Before concluding any work, validate the project with:
 
 ## Implementation notes
 - Keep route behavior intact and avoid breaking existing pages or shared layouts
-- If content changes are needed, update the relevant data source first and keep the rest of the UI unchanged
+- If managed content changes are needed, use the protected administrator routes after Supabase setup. Keep the verified static fallback aligned until the database rollout is confirmed.
 - When editing components, maintain the current structure, spacing, and visual tone so the site feels cohesive

@@ -12,13 +12,29 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+import { ContentNotice } from "@/components/content-notice";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { events, galleryItems, resources, team } from "@/data/site";
+import { galleryItems, resources } from "@/data/site";
+import {
+  getPublicAnnouncements,
+  getPublicEvents,
+  getPublicTeamMembers,
+} from "@/lib/data/public-content";
 
-export function HomePage() {
+export async function HomePage() {
+  const [eventResult, teamResult, announcementResult] = await Promise.all([
+    getPublicEvents(),
+    getPublicTeamMembers(),
+    getPublicAnnouncements(),
+  ]);
+  const events = eventResult.data;
+  const team = teamResult.data;
+  const announcement = announcementResult.data[0];
+  const contentNotice =
+    eventResult.notice ?? teamResult.notice ?? announcementResult.notice;
   const upcomingEvents = events
     .filter((event) => event.status !== "completed")
     .slice(0, 3);
@@ -120,28 +136,39 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="relative z-10 -mt-10 px-5 sm:px-8 lg:px-10">
-        <div className="mx-auto max-w-7xl rounded-[1.5rem] border border-gold/25 bg-[#fffaf1] px-5 py-4 shadow-[0_18px_50px_rgba(17,38,71,0.12)] sm:flex sm:items-center sm:justify-between sm:px-7">
-          <div className="flex items-start gap-3 sm:items-center">
-            <span className="mt-1 size-2 shrink-0 animate-pulse rounded-full bg-gold sm:mt-0" />
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold-dark">
-                Latest announcement
-              </p>
-              <p className="mt-1 text-sm font-medium text-navy-950 sm:text-base">
-                Registrations for CodeCraft 2026 are now open. Limited team
-                slots available.
-              </p>
-            </div>
+      {contentNotice || announcement ? (
+        <section className="relative z-10 -mt-10 px-5 sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-7xl">
+            <ContentNotice message={contentNotice} />
+            {announcement ? (
+              <div className="rounded-[1.5rem] border border-gold/25 bg-[#fffaf1] px-5 py-4 shadow-[0_18px_50px_rgba(17,38,71,0.12)] sm:flex sm:items-center sm:justify-between sm:px-7">
+                <div className="flex items-start gap-3 sm:items-center">
+                  <span className="mt-1 size-2 shrink-0 animate-pulse rounded-full bg-gold sm:mt-0" />
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold-dark">
+                      {announcement.priority} announcement
+                    </p>
+                    <p className="mt-1 text-sm font-bold text-navy-950">
+                      {announcement.title}
+                    </p>
+                    <p className="mt-1 text-sm text-slate-600">
+                      {announcement.message}
+                    </p>
+                  </div>
+                </div>
+                {announcement.linkUrl ? (
+                  <a
+                    href={announcement.linkUrl}
+                    className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-navy-950 sm:mt-0"
+                  >
+                    View details <ArrowRight className="size-4" />
+                  </a>
+                ) : null}
+              </div>
+            ) : null}
           </div>
-          <Link
-            href="/events"
-            className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-navy-950 sm:mt-0"
-          >
-            View details <ArrowRight className="size-4" />
-          </Link>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <section className="section-pad">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
@@ -196,6 +223,11 @@ export function HomePage() {
                 </div>
               </Card>
             ))}
+            {!upcomingEvents.length ? (
+              <p className="rounded-2xl border border-dashed border-navy-950/20 p-10 text-center text-slate-600 lg:col-span-3">
+                New events will be announced soon.
+              </p>
+            ) : null}
           </div>
         </div>
       </section>
@@ -335,7 +367,7 @@ export function HomePage() {
             <SectionHeading
               eyebrow="People behind SESA"
               title="Student-led. Faculty-guided. Built as one team."
-              description="The final names and profiles can be added later through the administration panel. The structure is ready now."
+              description="Meet the committee members who organise SESA activities and maintain continuity between student batches."
             />
             <Button asChild variant="outline">
               <Link href="/team">

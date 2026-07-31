@@ -5,12 +5,12 @@ import { useMemo, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { events } from "@/data/site";
 import { cn } from "@/lib/utils";
+import type { EventItem } from "@/types";
 
-const filters = ["All", "Upcoming", "Open", "Completed"];
+const filters = ["All", "Upcoming", "Live", "Planned", "Completed"];
 
-export function EventsBrowser() {
+export function EventsBrowser({ events }: { events: EventItem[] }) {
   const [filter, setFilter] = useState("All");
   const [query, setQuery] = useState("");
 
@@ -18,7 +18,7 @@ export function EventsBrowser() {
     const matchesFilter = filter === "All" || event.status === filter.toLowerCase();
     const searchable = `${event.title} ${event.category} ${event.venue} ${event.description}`.toLowerCase();
     return matchesFilter && searchable.includes(query.trim().toLowerCase());
-  }), [filter, query]);
+  }), [events, filter, query]);
 
   return (
     <div>
@@ -41,7 +41,21 @@ export function EventsBrowser() {
             <div className="p-6 sm:p-8">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <Badge className="text-gold-dark">{event.category}</Badge>
-                <span className={cn("rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.12em]", event.status === "open" && "bg-emerald-100 text-emerald-800", event.status === "upcoming" && "bg-blue-100 text-blue-800", event.status === "completed" && "bg-slate-100 text-slate-600")}>{event.status}</span>
+                <span
+                  className={cn(
+                    "rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.12em]",
+                    event.status === "live" &&
+                      "bg-emerald-100 text-emerald-800",
+                    event.status === "upcoming" &&
+                      "bg-blue-100 text-blue-800",
+                    event.status === "planned" &&
+                      "bg-amber-100 text-amber-800",
+                    event.status === "completed" &&
+                      "bg-slate-100 text-slate-600",
+                  )}
+                >
+                  {event.status}
+                </span>
               </div>
               <h2 className="mt-6 font-display text-3xl tracking-[-0.025em] text-navy-950 sm:text-4xl">{event.title}</h2>
               <p className="mt-3 text-sm leading-7 text-slate-600">{event.description}</p>
@@ -52,8 +66,23 @@ export function EventsBrowser() {
                 <span className="font-semibold text-navy-950">{event.time}</span>
               </div>
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button disabled={event.status === "completed"}>{event.status === "open" ? "Register now" : event.status === "completed" ? "Event completed" : "Notify me"}</Button>
-                <Button variant="outline">View details</Button>
+                {event.registrationUrl && event.status !== "completed" ? (
+                  <Button asChild>
+                    <a
+                      href={event.registrationUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Register now
+                    </a>
+                  </Button>
+                ) : (
+                  <Button disabled>
+                    {event.status === "completed"
+                      ? "Event completed"
+                      : "Registration not open"}
+                  </Button>
+                )}
               </div>
             </div>
           </article>
