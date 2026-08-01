@@ -16,6 +16,14 @@ function eventTimestamp(event: EventItem) {
   return Number.isNaN(timestamp) ? Number.MAX_SAFE_INTEGER : timestamp;
 }
 
+function displayOrder(event: EventItem) {
+  return event.displayOrder ?? Number.MAX_SAFE_INTEGER;
+}
+
+function compareDisplayOrder(first: EventItem, second: EventItem) {
+  return displayOrder(first) - displayOrder(second);
+}
+
 export function sortEventsForJourney(events: EventItem[]) {
   return [...events].sort((first, second) => {
     const statusDifference =
@@ -24,14 +32,54 @@ export function sortEventsForJourney(events: EventItem[]) {
       return statusDifference;
     }
 
-    const orderDifference =
-      (first.displayOrder ?? Number.MAX_SAFE_INTEGER) -
-      (second.displayOrder ?? Number.MAX_SAFE_INTEGER);
-    if (orderDifference !== 0) {
-      return orderDifference;
+    const firstTimestamp = eventTimestamp(first);
+    const secondTimestamp = eventTimestamp(second);
+
+    // Dated programme phases remain chronological. The CMS display order is a
+    // stable tie-breaker and remains primary for undated/planned content.
+    if (
+      first.status !== "planned" &&
+      firstTimestamp !== secondTimestamp
+    ) {
+      return firstTimestamp - secondTimestamp;
     }
 
-    const dateDifference = eventTimestamp(first) - eventTimestamp(second);
-    return dateDifference || first.title.localeCompare(second.title);
+    return (
+      compareDisplayOrder(first, second) || first.title.localeCompare(second.title)
+    );
   });
+}
+
+export function getNextFutureEventId(
+  events: EventItem[],
+  referenceTime: string | number | Date,
+) {
+  if (events.some((event) => event.status === "live")) {
+    return undefined;
+  }
+
+  const referenceTimestamp = new Date(referenceTime).getTime();
+  if (Number.isNaN(referenceTimestamp)) {
+    return undefined;
+  }
+
+  return events
+    .filter((event) => {
+      if (event.status !== "upcoming" && event.status !== "planned") {
+        return false;
+      }
+
+      if (!event.startAt) {
+        return false;
+      }
+
+      const timestamp = new Date(event.startAt).getTime();
+      return !Number.isNaN(timestamp) && timestamp > referenceTimestamp;
+    })
+    .sort(
+      (first, second) =>
+        eventTimestamp(first) - eventTimestamp(second) ||
+        compareDisplayOrder(first, second) ||
+        first.title.localeCompare(second.title),
+    )[0]?.id;
 }
