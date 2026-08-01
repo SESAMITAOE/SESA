@@ -2,6 +2,8 @@ import {
   Bell,
   CalendarCheck,
   CalendarDays,
+  Images,
+  LibraryBig,
   Radio,
   Users,
 } from "lucide-react";
@@ -22,6 +24,10 @@ export default async function AdminDashboardPage() {
     ["Upcoming events", stats.upcomingEvents, CalendarDays],
     ["Active team members", stats.activeTeamMembers, Users],
     ["Published announcements", stats.publishedAnnouncements, Bell],
+    ["Total gallery items", stats.totalGalleryItems, Images],
+    ["Published gallery items", stats.publishedGalleryItems, Images],
+    ["Total resources", stats.totalResources, LibraryBig],
+    ["Published resources", stats.publishedResources, LibraryBig],
   ] as const;
 
   return (
@@ -43,11 +49,13 @@ export default async function AdminDashboardPage() {
           </article>
         ))}
       </div>
-      <div className="mt-8 grid gap-4 md:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         {[
           ["/admin/events", "Manage events"],
           ["/admin/team", "Manage team"],
           ["/admin/announcements", "Manage announcements"],
+          ["/admin/gallery", "Manage gallery"],
+          ["/admin/resources", "Manage resources"],
         ].map(([href, label]) => (
           <Link
             key={href}

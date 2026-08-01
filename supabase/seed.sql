@@ -120,6 +120,29 @@ values
   ('20000000-0000-4000-8000-000000000025', 'Aryan Chaudhari', 'Core Member', 'Core Members', 'SY', '202401100142@mitaoe.ac.in', false, 25, true)
 on conflict do nothing;
 
+-- Existing senior-provided resource descriptions are preserved as drafts.
+-- They intentionally remain unpublished until an administrator adds a
+-- verified external URL or uploads the corresponding file.
+insert into public.resources (
+  id,
+  title,
+  description,
+  category,
+  resource_type,
+  audience,
+  is_featured,
+  is_published,
+  display_order
+)
+values
+  ('30000000-0000-4000-8000-000000000001', 'Frontend Engineering Starter Pack', 'A structured path covering HTML, CSS, JavaScript, React and practical project habits.', 'Engineering', 'guide', 'Students', false, false, 1),
+  ('30000000-0000-4000-8000-000000000002', 'Git & GitHub Team Workflow', 'Branching, pull requests, reviews, issues and clean handover practices for student teams.', 'Collaboration', 'guide', 'Student teams', false, false, 2),
+  ('30000000-0000-4000-8000-000000000003', 'Event Planning Checklist', 'A reusable checklist for permissions, logistics, registrations, communication and reporting.', 'Events', 'document', 'Event organisers', false, false, 3),
+  ('30000000-0000-4000-8000-000000000004', 'Project Documentation Standard', 'A simple documentation structure so future batches can understand and continue projects.', 'Documentation', 'guide', 'Project teams', false, false, 4),
+  ('30000000-0000-4000-8000-000000000005', 'Software Engineering Reading List', 'Selected references for design, architecture, testing, databases and product thinking.', 'Learning', 'guide', 'Students', false, false, 5),
+  ('30000000-0000-4000-8000-000000000006', 'Presentation & Demo Guide', 'How to explain a technical project clearly without overselling unfinished work.', 'Communication', 'guide', 'Students', false, false, 6)
+on conflict do nothing;
+
 -- The previous CodeCraft banner had no matching senior-provided event and was
 -- stale placeholder content, so no announcement is invented or seeded here.
 

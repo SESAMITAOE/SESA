@@ -102,6 +102,10 @@ export function AnnouncementForm({
           />
         </label>
       </div>
+      <p className="mt-3 text-xs leading-5 text-slate-500">
+        Announcement scheduling uses India Standard Time. Leave both dates
+        empty to keep a published announcement active until it is unpublished.
+      </p>
       <div className="mt-6 flex flex-wrap gap-6">
         <label className="flex items-center gap-2 text-sm font-semibold text-navy-950">
           <input
@@ -109,7 +113,7 @@ export function AnnouncementForm({
             name="is_published"
             defaultChecked={announcement?.is_published}
           />
-          Published
+          Published on the public homepage
         </label>
         <label className="flex items-center gap-2 text-sm font-semibold text-navy-950">
           <input
@@ -117,7 +121,7 @@ export function AnnouncementForm({
             name="is_pinned"
             defaultChecked={announcement?.is_pinned}
           />
-          Pinned
+          Pinned above other announcements
         </label>
       </div>
       {state.message ? (

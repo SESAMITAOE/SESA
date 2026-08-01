@@ -1,16 +1,34 @@
-import { events as staticEvents, team as staticTeam } from "@/data/site";
+import {
+  events as staticEvents,
+  galleryItems as staticGalleryItems,
+  resources as staticResources,
+  team as staticTeam,
+} from "@/data/site";
+import { sortAnnouncements } from "@/lib/announcements";
+import { sortEventsForJourney } from "@/lib/events";
+import {
+  GALLERY_BUCKET,
+  getSignedCmsFileUrl,
+  RESOURCE_BUCKET,
+} from "@/lib/storage/cms-files";
 import { SUPABASE_CONFIGURATION_MESSAGE } from "@/lib/supabase/config";
 import { getServerSupabaseClient } from "@/lib/supabase/server";
 import type {
   AnnouncementItem,
   EventItem,
+  GalleryItem,
+  ResourceItem,
   TeamMember,
 } from "@/types";
 import type {
   AnnouncementRow,
   EventRow,
+  GalleryItemRow,
   PublicTeamMemberRow,
+  ResourceRow,
 } from "@/types/database";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/types/database";
 
 export interface PublicContentResult<T> {
   data: T;
@@ -23,6 +41,13 @@ const EVENT_ACCENTS = [
   "from-[#8a6940] to-[#cab48e]",
   "from-[#5076a6] to-[#9ab7d8]",
   "from-[#66755d] to-[#b8c8a9]",
+];
+
+const GALLERY_ACCENTS = [
+  "from-[#163a62] via-[#234f7a] to-[#b18345]",
+  "from-[#101d36] via-[#4f3a63] to-[#d4a15d]",
+  "from-[#24364e] via-[#5d6f65] to-[#d4bd93]",
+  "from-[#122f50] via-[#73516d] to-[#c99956]",
 ];
 
 const databaseUnavailableMessage =
@@ -81,12 +106,20 @@ function formatEventTime(row: EventRow) {
     : formatTime(start);
 }
 
+function formatDateTime(value: string) {
+  const date = new Date(value);
+  return `${formatDate(date)}, ${formatTime(date)}`;
+}
+
 function mapEvent(row: EventRow, index: number): EventItem {
   return {
     id: row.id,
     slug: row.slug,
     title: row.title,
+    shortDescription: row.short_description,
     description: row.description || row.short_description,
+    startAt: row.start_at ?? undefined,
+    endAt: row.end_at ?? undefined,
     date: formatEventDate(row),
     time: formatEventTime(row),
     venue: row.venue || "TBA",
@@ -97,6 +130,10 @@ function mapEvent(row: EventRow, index: number): EventItem {
     posterUrl: row.poster_url ?? undefined,
     registrationUrl: row.registration_url ?? undefined,
     registrationDeadline: row.registration_deadline ?? undefined,
+    registrationDeadlineLabel: row.registration_deadline
+      ? formatDateTime(row.registration_deadline)
+      : undefined,
+    displayOrder: row.display_order,
     accent: EVENT_ACCENTS[index % EVENT_ACCENTS.length],
   };
 }
@@ -142,6 +179,58 @@ function mapAnnouncement(row: AnnouncementRow): AnnouncementItem {
   };
 }
 
+async function mapGalleryItem(
+  supabase: SupabaseClient<Database>,
+  row: GalleryItemRow,
+  index: number,
+): Promise<GalleryItem> {
+  const storedImageUrl = await getSignedCmsFileUrl(
+    supabase,
+    GALLERY_BUCKET,
+    row.storage_path,
+  );
+
+  return {
+    id: row.id,
+    title: row.title,
+    caption: row.caption,
+    altText: row.alt_text,
+    imageUrl: row.image_url ?? storedImageUrl,
+    category: row.category,
+    eventId: row.event_id ?? undefined,
+    capturedAt: row.captured_at ?? undefined,
+    featured: row.is_featured,
+    displayOrder: row.display_order,
+    gradient: GALLERY_ACCENTS[index % GALLERY_ACCENTS.length],
+  };
+}
+
+async function mapResource(
+  supabase: SupabaseClient<Database>,
+  row: ResourceRow,
+): Promise<ResourceItem> {
+  const storedFileUrl = await getSignedCmsFileUrl(
+    supabase,
+    RESOURCE_BUCKET,
+    row.storage_path,
+  );
+  const fileHref = row.file_url ?? storedFileUrl;
+
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    category: row.category,
+    resourceType: row.resource_type,
+    href: row.external_url ?? fileHref,
+    isFile: !row.external_url && Boolean(fileHref),
+    audience: row.audience ?? undefined,
+    academicYear: row.academic_year ?? undefined,
+    featured: row.is_featured,
+    displayOrder: row.display_order,
+  };
+}
+
 function privateStaticTeam(): TeamMember[] {
   return staticTeam.map((member, index) => ({
     ...member,
@@ -157,7 +246,12 @@ export async function getPublicEvents(): Promise<
   const supabase = await getServerSupabaseClient();
   if (!supabase) {
     return {
-      data: staticEvents,
+      data: sortEventsForJourney(
+        staticEvents.map((event, index) => ({
+          ...event,
+          displayOrder: event.displayOrder ?? index + 1,
+        })),
+      ),
       notice: SUPABASE_CONFIGURATION_MESSAGE,
       source: "fallback",
     };
@@ -172,14 +266,19 @@ export async function getPublicEvents(): Promise<
 
   if (error) {
     return {
-      data: staticEvents,
+      data: sortEventsForJourney(
+        staticEvents.map((event, index) => ({
+          ...event,
+          displayOrder: event.displayOrder ?? index + 1,
+        })),
+      ),
       notice: databaseUnavailableMessage,
       source: "fallback",
     };
   }
 
   return {
-    data: data.map(mapEvent),
+    data: sortEventsForJourney(data.map(mapEvent)),
     source: "database",
   };
 }
@@ -229,12 +328,14 @@ export async function getPublicAnnouncements(): Promise<
     };
   }
 
+  const now = new Date();
+  const nowIso = now.toISOString();
   const { data, error } = await supabase
     .from("announcements")
     .select("*")
     .eq("is_published", true)
-    .order("is_pinned", { ascending: false })
-    .order("created_at", { ascending: false });
+    .or(`starts_at.is.null,starts_at.lte.${nowIso}`)
+    .or(`ends_at.is.null,ends_at.gte.${nowIso}`);
 
   if (error) {
     return {
@@ -244,18 +345,89 @@ export async function getPublicAnnouncements(): Promise<
     };
   }
 
-  const now = Date.now();
   const activeAnnouncements = data.filter((announcement) => {
     const hasStarted =
       !announcement.starts_at ||
-      new Date(announcement.starts_at).getTime() <= now;
+      new Date(announcement.starts_at).getTime() <= now.getTime();
     const hasNotEnded =
-      !announcement.ends_at || new Date(announcement.ends_at).getTime() >= now;
+      !announcement.ends_at ||
+      new Date(announcement.ends_at).getTime() >= now.getTime();
     return hasStarted && hasNotEnded;
   });
 
   return {
-    data: activeAnnouncements.map(mapAnnouncement),
+    data: activeAnnouncements.sort(sortAnnouncements).map(mapAnnouncement),
+    source: "database",
+  };
+}
+
+export async function getPublicGalleryItems(): Promise<
+  PublicContentResult<GalleryItem[]>
+> {
+  const supabase = await getServerSupabaseClient();
+  if (!supabase) {
+    return {
+      data: staticGalleryItems,
+      notice: SUPABASE_CONFIGURATION_MESSAGE,
+      source: "fallback",
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("gallery_items")
+    .select("*")
+    .eq("is_published", true)
+    .order("is_featured", { ascending: false })
+    .order("display_order", { ascending: true })
+    .order("captured_at", { ascending: false, nullsFirst: false })
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    return {
+      data: staticGalleryItems,
+      notice: databaseUnavailableMessage,
+      source: "fallback",
+    };
+  }
+
+  return {
+    data: await Promise.all(
+      data.map((item, index) => mapGalleryItem(supabase, item, index)),
+    ),
+    source: "database",
+  };
+}
+
+export async function getPublicResources(): Promise<
+  PublicContentResult<ResourceItem[]>
+> {
+  const supabase = await getServerSupabaseClient();
+  if (!supabase) {
+    return {
+      data: staticResources,
+      notice: SUPABASE_CONFIGURATION_MESSAGE,
+      source: "fallback",
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("resources")
+    .select("*")
+    .eq("is_published", true)
+    .order("is_featured", { ascending: false })
+    .order("display_order", { ascending: true })
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    return {
+      data: staticResources,
+      notice: databaseUnavailableMessage,
+      source: "fallback",
+    };
+  }
+
+  return {
+    data: await Promise.all(data.map((resource) => mapResource(supabase, resource))),
     source: "database",
   };
 }

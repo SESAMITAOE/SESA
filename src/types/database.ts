@@ -1,6 +1,13 @@
 export type AdminRole = "admin";
 export type AnnouncementPriority = "normal" | "important" | "urgent";
 export type DatabaseEventStatus = "completed" | "live" | "upcoming" | "planned";
+export type ResourceType =
+  | "document"
+  | "link"
+  | "video"
+  | "repository"
+  | "guide"
+  | "other";
 
 export type ProfileRow = {
   id: string;
@@ -78,6 +85,43 @@ export type AnnouncementRow = {
   updated_at: string;
 };
 
+export type GalleryItemRow = {
+  id: string;
+  title: string;
+  caption: string;
+  alt_text: string;
+  image_url: string | null;
+  storage_path: string | null;
+  category: string;
+  event_id: string | null;
+  captured_at: string | null;
+  display_order: number;
+  is_featured: boolean;
+  is_published: boolean;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ResourceRow = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  resource_type: ResourceType;
+  external_url: string | null;
+  file_url: string | null;
+  storage_path: string | null;
+  audience: string | null;
+  academic_year: string | null;
+  is_featured: boolean;
+  is_published: boolean;
+  display_order: number;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export type ProfileInsert = {
   id: string;
   full_name: string;
@@ -140,6 +184,43 @@ export type AnnouncementInsert = {
   updated_at?: string;
 };
 
+export type GalleryItemInsert = {
+  id?: string;
+  title: string;
+  caption?: string;
+  alt_text: string;
+  image_url?: string | null;
+  storage_path?: string | null;
+  category?: string;
+  event_id?: string | null;
+  captured_at?: string | null;
+  display_order?: number;
+  is_featured?: boolean;
+  is_published?: boolean;
+  created_by?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type ResourceInsert = {
+  id?: string;
+  title: string;
+  description: string;
+  category?: string;
+  resource_type?: ResourceType;
+  external_url?: string | null;
+  file_url?: string | null;
+  storage_path?: string | null;
+  audience?: string | null;
+  academic_year?: string | null;
+  is_featured?: boolean;
+  is_published?: boolean;
+  display_order?: number;
+  created_by?: string | null;
+  created_at?: string;
+  updated_at?: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -167,6 +248,18 @@ export type Database = {
         Update: Partial<AnnouncementInsert>;
         Relationships: [];
       };
+      gallery_items: {
+        Row: GalleryItemRow;
+        Insert: GalleryItemInsert;
+        Update: Partial<GalleryItemInsert>;
+        Relationships: [];
+      };
+      resources: {
+        Row: ResourceRow;
+        Insert: ResourceInsert;
+        Update: Partial<ResourceInsert>;
+        Relationships: [];
+      };
     };
     Views: {
       public_team_members: {
@@ -180,6 +273,20 @@ export type Database = {
         Returns: boolean;
       };
       swap_team_member_order: {
+        Args: {
+          first_id: string;
+          second_id: string;
+        };
+        Returns: undefined;
+      };
+      swap_gallery_item_order: {
+        Args: {
+          first_id: string;
+          second_id: string;
+        };
+        Returns: undefined;
+      };
+      swap_resource_order: {
         Args: {
           first_id: string;
           second_id: string;

@@ -28,12 +28,17 @@ approved `profiles` row with the `admin` role.
 ## Content and administration
 
 Public visitors never need an account. Approved administrators sign in at
-`/admin/login` to manage events, committee members, and homepage
-announcements.
+`/admin/login` to manage events, committee members, announcements, gallery
+images, and resources.
+
+Gallery and resource uploads are stored in private Supabase Storage buckets.
+Published records receive short-lived signed file URLs on the server; drafts
+remain unavailable to anonymous visitors. Apply both migrations in order before
+using the new administrator modules.
 
 See [docs/ADMIN_CMS_SETUP.md](docs/ADMIN_CMS_SETUP.md) for database setup,
-security policies, seed data, administrator creation, local verification, and
-Vercel deployment.
+Storage policies, file constraints, seed data, administrator workflows, local
+verification, junior handover, and Vercel deployment.
 
 ## Quality checks
 

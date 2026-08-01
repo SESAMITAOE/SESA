@@ -4,7 +4,10 @@ export interface EventItem {
   id: string;
   slug: string;
   title: string;
+  shortDescription?: string;
   description: string;
+  startAt?: string;
+  endAt?: string;
   date: string;
   time: string;
   venue: string;
@@ -16,6 +19,8 @@ export interface EventItem {
   posterUrl?: string;
   registrationUrl?: string;
   registrationDeadline?: string;
+  registrationDeadlineLabel?: string;
+  displayOrder?: number;
   accent: string;
 }
 
@@ -37,9 +42,36 @@ export interface TeamMember {
 export interface ResourceItem {
   id: string;
   title: string;
-  type: string;
   description: string;
-  meta: string;
+  category: string;
+  resourceType:
+    | "document"
+    | "link"
+    | "video"
+    | "repository"
+    | "guide"
+    | "other";
+  href?: string;
+  isFile: boolean;
+  audience?: string;
+  academicYear?: string;
+  featured: boolean;
+  displayOrder: number;
+  meta?: string;
+}
+
+export interface GalleryItem {
+  id: string;
+  title: string;
+  caption: string;
+  altText: string;
+  imageUrl?: string;
+  category: string;
+  eventId?: string;
+  capturedAt?: string;
+  featured: boolean;
+  displayOrder: number;
+  gradient: string;
 }
 
 export type AnnouncementPriority = "normal" | "important" | "urgent";

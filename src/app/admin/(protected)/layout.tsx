@@ -11,6 +11,8 @@ const adminNavigation = [
   { href: "/admin/events", label: "Events" },
   { href: "/admin/team", label: "Team" },
   { href: "/admin/announcements", label: "Announcements" },
+  { href: "/admin/gallery", label: "Gallery" },
+  { href: "/admin/resources", label: "Resources" },
 ];
 
 export default async function ProtectedAdminLayout({
