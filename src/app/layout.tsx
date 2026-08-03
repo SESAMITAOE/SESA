@@ -19,5 +19,12 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#08162a" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en" className={cn("font-sans", geist.variable)}><body><SplashScreen />{children}</body></html>;
+  return (
+    <html suppressHydrationWarning lang="en" className={cn("font-sans", geist.variable)}>
+      <body>
+        <SplashScreen />
+        {children}
+      </body>
+    </html>
+  );
 }

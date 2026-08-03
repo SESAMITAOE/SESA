@@ -1,4 +1,4 @@
-# SESA Administrator CMS Setup
+<!-- # SESA Administrator CMS Setup
 
 This guide is for the junior maintainers who configure and operate the SESA
 content-management system. Public students do not need accounts. Do not add a
@@ -253,4 +253,4 @@ Before handing the CMS to another batch:
 4. Confirm both private buckets retain their file-size and MIME restrictions.
 5. Run `npm run lint`, `npm run build`, and responsive public-page checks.
 6. Record operational ownership privately. Never add passwords, private keys,
-   session tokens, or real credentials to this repository.
+   session tokens, or real credentials to this repository. -->
