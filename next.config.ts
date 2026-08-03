@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
         "127.0.0.1:3000",
         "https://dg19qzqf-3000.inc1.devtunnels.ms/"
       ],
-      bodySizeLimit: "5mb",
+      bodySizeLimit: "6mb",
     },
   },
   images: {
