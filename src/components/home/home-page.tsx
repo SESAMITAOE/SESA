@@ -58,7 +58,7 @@ export async function HomePage() {
 
   return (
     <div className="overflow-hidden bg-ivory">
-      <section className="relative min-h-[860px] bg-navy-950 pb-24 pt-32 text-ivory sm:pt-36 lg:min-h-screen lg:pb-28 lg:pt-40">
+      <section className="relative min-h-[760px] bg-navy-950 pb-20 pt-28 text-ivory sm:min-h-[820px] sm:pt-32 lg:min-h-screen lg:pb-28 lg:pt-40">
         <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
           <div className="absolute -left-48 top-32 size-[32rem] rounded-full bg-[#1f4b78]/28 blur-3xl" />
           <div className="absolute -right-52 top-10 size-[34rem] rounded-full bg-gold/16 blur-3xl" />
@@ -71,7 +71,7 @@ export async function HomePage() {
             <div className="animate-rise inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/7 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-gold-light backdrop-blur">
               <Sparkles className="size-4" /> Department student association
             </div>
-            <h1 className="animate-rise animation-delay-100 mt-7 font-display text-5xl leading-[0.95] tracking-[-0.045em] sm:text-6xl lg:text-[5.6rem]">
+            <h1 className="animate-rise animation-delay-100 mt-7 font-display text-4xl leading-[0.95] tracking-[-0.045em] sm:text-5xl md:text-6xl lg:text-[5.6rem]">
               Where software engineers
               <span className="block text-gold-light">
                 build what&apos;s next.
@@ -82,7 +82,7 @@ export async function HomePage() {
               collaboration, stronger projects and a more connected Software
               Engineering community at MITAOE.
             </p>
-            <div className="animate-rise animation-delay-300 mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="animate-rise animation-delay-300 mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Button asChild size="lg">
                 <Link href="/events">
                   Explore upcoming events <ArrowRight className="size-4" />
@@ -119,14 +119,10 @@ export async function HomePage() {
                   width={520}
                   height={520}
                   priority
-                  className="relative mx-auto h-auto w-full max-w-[390px] drop-shadow-[0_28px_45px_rgba(17,38,71,0.18)]"
+                  className="relative mx-auto h-auto w-[240px] object-cover drop-shadow-[0_28px_45px_rgba(17,38,71,0.18)] sm:w-[300px]"
                   style={{
-                    width: "300px",
-                    height: "300px",
-                    objectFit: "cover",
                     mixBlendMode: "multiply",
                     borderRadius: "24px",
-                    // Sharp 2rem radius center circle, then smoothly fades out to the edges
                     maskImage:
                       "radial-gradient(circle, black 0px, black 8rem, transparent 100%)",
                     WebkitMaskImage:

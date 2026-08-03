@@ -296,8 +296,11 @@ export async function getPublicTeamMembers(): Promise<
   }
 
   const { data, error } = await supabase
-    .from("public_team_members")
-    .select("*")
+    .from("team_members")
+    .select(
+      "id, full_name, role, member_group, year, email, is_email_public, profile_image_url, linkedin_url, github_url, display_order",
+    )
+    .eq("is_active", true)
     .order("display_order", { ascending: true });
 
   if (error) {
