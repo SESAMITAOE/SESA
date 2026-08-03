@@ -12,13 +12,46 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
+import { ContentNotice } from "@/components/content-notice";
+import { AnnouncementList } from "@/components/home/announcement-list";
+import { HomeGalleryPreview } from "@/components/home/gallery-preview";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { events, galleryItems, resources, team } from "@/data/site";
+import {
+  getPublicAnnouncements,
+  getPublicEvents,
+  getPublicGalleryItems,
+  getPublicResources,
+  getPublicTeamMembers,
+} from "@/lib/data/public-content";
 
-export function HomePage() {
+export async function HomePage() {
+  const [
+    eventResult,
+    teamResult,
+    announcementResult,
+    galleryResult,
+    resourceResult,
+  ] = await Promise.all([
+    getPublicEvents(),
+    getPublicTeamMembers(),
+    getPublicAnnouncements(),
+    getPublicGalleryItems(),
+    getPublicResources(),
+  ]);
+  const events = eventResult.data;
+  const team = teamResult.data;
+  const announcements = announcementResult.data;
+  const galleryItems = galleryResult.data;
+  const resources = resourceResult.data;
+  const contentNotice =
+    eventResult.notice ??
+    teamResult.notice ??
+    announcementResult.notice ??
+    galleryResult.notice ??
+    resourceResult.notice;
   const upcomingEvents = events
     .filter((event) => event.status !== "completed")
     .slice(0, 3);
@@ -120,28 +153,14 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="relative z-10 -mt-10 px-5 sm:px-8 lg:px-10">
-        <div className="mx-auto max-w-7xl rounded-[1.5rem] border border-gold/25 bg-[#fffaf1] px-5 py-4 shadow-[0_18px_50px_rgba(17,38,71,0.12)] sm:flex sm:items-center sm:justify-between sm:px-7">
-          <div className="flex items-start gap-3 sm:items-center">
-            <span className="mt-1 size-2 shrink-0 animate-pulse rounded-full bg-gold sm:mt-0" />
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold-dark">
-                Latest announcement
-              </p>
-              <p className="mt-1 text-sm font-medium text-navy-950 sm:text-base">
-                Registrations for CodeCraft 2026 are now open. Limited team
-                slots available.
-              </p>
-            </div>
+      {contentNotice || announcements.length ? (
+        <section className="relative z-10 -mt-10 px-5 sm:px-8 lg:px-10">
+          <div className="mx-auto max-w-7xl">
+            <ContentNotice message={contentNotice} />
+            <AnnouncementList announcements={announcements} />
           </div>
-          <Link
-            href="/events"
-            className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-navy-950 sm:mt-0"
-          >
-            View details <ArrowRight className="size-4" />
-          </Link>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <section className="section-pad">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
@@ -187,7 +206,7 @@ export function HomePage() {
                     </div>
                   </div>
                   <Link
-                    href="/events"
+                    href={`/events#event-${event.slug}`}
                     className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-navy-950"
                   >
                     Event details{" "}
@@ -196,6 +215,11 @@ export function HomePage() {
                 </div>
               </Card>
             ))}
+            {!upcomingEvents.length ? (
+              <p className="rounded-2xl border border-dashed border-navy-950/20 p-10 text-center text-slate-600 lg:col-span-3">
+                New events will be announced soon.
+              </p>
+            ) : null}
           </div>
         </div>
       </section>
@@ -300,25 +324,7 @@ export function HomePage() {
             title="Moments where participation became progress."
             description="A visual record of workshops, competitions, project showcases and the people who make them happen."
           />
-          <div className="mt-12 grid auto-rows-[220px] gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {galleryItems.slice(0, 5).map((item, index) => (
-              <Link
-                href="/gallery"
-                key={item.title}
-                className={`group relative overflow-hidden rounded-[1.75rem] bg-gradient-to-br ${item.gradient} p-6 text-ivory shadow-[0_20px_60px_rgba(17,38,71,0.12)] ${index === 0 ? "sm:row-span-2" : ""}`}
-              >
-                <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(8,22,42,0.78),transparent_65%)]" />
-                <div className="absolute -right-8 -top-8 size-32 rounded-full border border-white/15 transition duration-500 group-hover:scale-125" />
-                <div className="relative flex h-full flex-col justify-end">
-                  <span className="text-xs font-bold uppercase tracking-[0.16em] text-gold-light">
-                    {item.category}
-                  </span>
-                  <h3 className="mt-2 font-display text-3xl">{item.title}</h3>
-                  <p className="mt-1 text-sm text-slate-200">{item.label}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+          <HomeGalleryPreview items={galleryItems} />
           <div className="mt-8">
             <Button asChild variant="outline">
               <Link href="/gallery">
@@ -335,7 +341,7 @@ export function HomePage() {
             <SectionHeading
               eyebrow="People behind SESA"
               title="Student-led. Faculty-guided. Built as one team."
-              description="The final names and profiles can be added later through the administration panel. The structure is ready now."
+              description="Meet the committee members who organise SESA activities and maintain continuity between student batches."
             />
             <Button asChild variant="outline">
               <Link href="/team">
@@ -388,7 +394,7 @@ export function HomePage() {
               >
                 <div className="flex items-center justify-between gap-4">
                   <span className="text-xs font-bold uppercase tracking-[0.15em] text-gold-dark">
-                    {resource.type}
+                    {resource.resourceType}
                   </span>
                   <ArrowUpRight className="size-4 text-slate-400 transition group-hover:text-gold-dark" />
                 </div>
@@ -399,7 +405,9 @@ export function HomePage() {
                   {resource.description}
                 </p>
                 <p className="mt-5 border-t border-navy-950/8 pt-4 text-xs font-semibold text-slate-500">
-                  {resource.meta}
+                  {[resource.category, resource.audience, resource.academicYear]
+                    .filter(Boolean)
+                    .join(" • ") || resource.meta}
                 </p>
               </Link>
             ))}

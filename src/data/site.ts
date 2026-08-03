@@ -1,4 +1,9 @@
-import type { EventItem, ResourceItem, TeamMember } from "@/types";
+import type {
+  EventItem,
+  GalleryItem,
+  ResourceItem,
+  TeamMember,
+} from "@/types";
 
 export const navItems = [
   { label: "Home", href: "/" },
@@ -88,19 +93,19 @@ export const team: TeamMember[] = [
 ];
 
 export const resources: ResourceItem[] = [
-  { id: "res-01", title: "Frontend Engineering Starter Pack", type: "Guide", description: "A structured path covering HTML, CSS, JavaScript, React and practical project habits.", meta: "12 modules" },
-  { id: "res-02", title: "Git & GitHub Team Workflow", type: "Playbook", description: "Branching, pull requests, reviews, issues and clean handover practices for student teams.", meta: "Updated July 2026" },
-  { id: "res-03", title: "Event Planning Checklist", type: "Template", description: "A reusable checklist for permissions, logistics, registrations, communication and reporting.", meta: "Printable" },
-  { id: "res-04", title: "Project Documentation Standard", type: "Standard", description: "A simple documentation structure so future batches can understand and continue projects.", meta: "Version 1.0" },
-  { id: "res-05", title: "Software Engineering Reading List", type: "Collection", description: "Selected references for design, architecture, testing, databases and product thinking.", meta: "24 resources" },
-  { id: "res-06", title: "Presentation & Demo Guide", type: "Guide", description: "How to explain a technical project clearly without overselling unfinished work.", meta: "8 min read" },
+  { id: "res-01", title: "Frontend Engineering Starter Pack", description: "A structured path covering HTML, CSS, JavaScript, React and practical project habits.", category: "Engineering", resourceType: "guide", isFile: false, featured: false, displayOrder: 1, meta: "12 modules" },
+  { id: "res-02", title: "Git & GitHub Team Workflow", description: "Branching, pull requests, reviews, issues and clean handover practices for student teams.", category: "Collaboration", resourceType: "guide", isFile: false, featured: false, displayOrder: 2, meta: "Updated July 2026" },
+  { id: "res-03", title: "Event Planning Checklist", description: "A reusable checklist for permissions, logistics, registrations, communication and reporting.", category: "Events", resourceType: "document", isFile: false, featured: false, displayOrder: 3, meta: "Printable" },
+  { id: "res-04", title: "Project Documentation Standard", description: "A simple documentation structure so future batches can understand and continue projects.", category: "Documentation", resourceType: "guide", isFile: false, featured: false, displayOrder: 4, meta: "Version 1.0" },
+  { id: "res-05", title: "Software Engineering Reading List", description: "Selected references for design, architecture, testing, databases and product thinking.", category: "Learning", resourceType: "guide", isFile: false, featured: false, displayOrder: 5, meta: "24 resources" },
+  { id: "res-06", title: "Presentation & Demo Guide", description: "How to explain a technical project clearly without overselling unfinished work.", category: "Communication", resourceType: "guide", isFile: false, featured: false, displayOrder: 6, meta: "8 min read" },
 ];
 
-export const galleryItems = [
-  { title: "Project Expo", category: "Showcase", label: "Build in public", gradient: "from-[#163a62] via-[#234f7a] to-[#b18345]" },
-  { title: "Coding Sprint", category: "Hackathon", label: "Solve together", gradient: "from-[#101d36] via-[#4f3a63] to-[#d4a15d]" },
-  { title: "Expert Session", category: "Talk", label: "Learn from practice", gradient: "from-[#24364e] via-[#5d6f65] to-[#d4bd93]" },
-  { title: "Design Workshop", category: "Workshop", label: "Make ideas visible", gradient: "from-[#122f50] via-[#73516d] to-[#c99956]" },
-  { title: "Team Meet", category: "Community", label: "Work with clarity", gradient: "from-[#142746] via-[#385c73] to-[#a27b49]" },
-  { title: "Open Source Day", category: "Community", label: "Contribute beyond campus", gradient: "from-[#1b3551] via-[#3c6b65] to-[#b98c4a]" },
+export const galleryItems: GalleryItem[] = [
+  { id: "gal-01", title: "Project Expo", category: "Showcase", caption: "Build in public", altText: "Project Expo image placeholder", featured: true, displayOrder: 1, gradient: "from-[#163a62] via-[#234f7a] to-[#b18345]" },
+  { id: "gal-02", title: "Coding Sprint", category: "Hackathon", caption: "Solve together", altText: "Coding Sprint image placeholder", featured: false, displayOrder: 2, gradient: "from-[#101d36] via-[#4f3a63] to-[#d4a15d]" },
+  { id: "gal-03", title: "Expert Session", category: "Talk", caption: "Learn from practice", altText: "Expert Session image placeholder", featured: false, displayOrder: 3, gradient: "from-[#24364e] via-[#5d6f65] to-[#d4bd93]" },
+  { id: "gal-04", title: "Design Workshop", category: "Workshop", caption: "Make ideas visible", altText: "Design Workshop image placeholder", featured: false, displayOrder: 4, gradient: "from-[#122f50] via-[#73516d] to-[#c99956]" },
+  { id: "gal-05", title: "Team Meet", category: "Community", caption: "Work with clarity", altText: "Team Meet image placeholder", featured: false, displayOrder: 5, gradient: "from-[#142746] via-[#385c73] to-[#a27b49]" },
+  { id: "gal-06", title: "Open Source Day", category: "Community", caption: "Contribute beyond campus", altText: "Open Source Day image placeholder", featured: false, displayOrder: 6, gradient: "from-[#1b3551] via-[#3c6b65] to-[#b98c4a]" },
 ];

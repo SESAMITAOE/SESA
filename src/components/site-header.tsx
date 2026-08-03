@@ -39,11 +39,11 @@ export function SiteHeader() {
           })}
         </nav>
 
-        <button type="button" aria-expanded={open} aria-controls="mobile-navigation" aria-label={open ? "Close navigation" : "Open navigation"} onClick={() => setOpen((value) => !value)} className="grid size-11 place-items-center rounded-full border border-white/12 bg-white/7 text-ivory lg:hidden">{open ? <X className="size-5" /> : <Menu className="size-5" />}</button>
+        <button type="button" aria-expanded={open} aria-controls="mobile-navigation" aria-label={open ? "Close navigation" : "Open navigation"} onClick={() => setOpen((value) => !value)} className="grid size-11 place-items-center rounded-full border border-white/12 bg-white/7 text-ivory xl:hidden">{open ? <X className="size-5" /> : <Menu className="size-5" />}</button>
       </div>
 
       <AnimatePresence>
-        {open ? <motion.div id="mobile-navigation" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden border-t border-white/8 bg-navy-950/98 backdrop-blur-xl lg:hidden">
+        {open ? <motion.div id="mobile-navigation" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden border-t border-white/8 bg-navy-950/98 backdrop-blur-xl xl:hidden">
           <nav className="mx-auto grid max-w-7xl gap-1 px-5 py-5 sm:px-8" aria-label="Mobile navigation">
             {navItems.map((item) => { const active = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href); return <Link key={item.href} href={item.href} className={cn("rounded-2xl px-4 py-3 text-base font-medium text-slate-300 hover:bg-white/7 hover:text-ivory", active && "bg-white/8 text-gold-light")}>{item.label}</Link>; })}
           </nav>
